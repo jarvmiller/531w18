@@ -36,6 +36,14 @@ $$\hat\mu(x_{1:N}) = \frac{1}{N}\sum_{n=1}^N x_n.$$
 Show how the basic properties of covariance can be used to derive the expression,
 $$\var\big(\hat\mu(X_{1:N})\big) = \frac{1}{N}\gamma_0 + \frac{2}{N^2}\sum_{h=1}^{N-1}(N-h)\gamma_h.$$
 
+-------------------
+
+**SOLN**
+$$\begin{aligned} 
+var\big(\hat\mu(X_{1:N})\big) &= \frac{1}{N^{2}}\sum_{n=1}^{N}\gamma_{0} + \frac{2}{N^{2}}\sum_{1 \ \leq i \ \leq j \ \leq n} Cov(X_{i}, X_{j}) \\
+&= \frac{\gamma_{0}}{N} + \frac{2}{N^{2}}[(N-1)Cov(X_{1},X_{j})1_{[j > 1]} + (N-2)Cov(X_{2},X_{j})1_{[j > 2]} + ... (N-(N-1))Cov(X_{N-1}, X_{N}) \\
+&= \frac{\gamma_{0}}{N} + \frac{2}{N^2}\sum_{h=1}^{N-1}(N-h)\gamma_h.
+\end{aligned}$$
 
 -------------------
 
@@ -76,6 +84,29 @@ This approximates $Y$ as a linear function of $X$, so we have
 
 <br>
 
+----------------------
+
+
+*SOLN*
+After accounting for our IID mean 0 assumption, we have $$\rho_{h} = \frac{\gamma_{h}}{\gamma_{0}} = \frac{\frac{1}{N} \sum_{h=1}^{N-h}y_{n}y_{n+h}}{\frac{1}{N}\sum_{n=1}^{N}y_{n}^{2}}$$ 
+
+Label the top sum $A$ and the bottom sum $B$. Then we have $Y=g(A, B)$ and we can make a taylor series approximation as hinted above.
+Note that $\mu_{A} = \sum E[y_{n}y_{n+h}] = 0$ while $\mu_{B} = \sum E[y_{n}^2] = \sum Var(y_{n}) = N\sigma^{2}$
+
+Taking partial derivatives, we have $\frac{\partial}{\partial A}\frac{A}{B} = \frac{1}{B}$ and $\frac{\partial}{\partial B}\frac{A}{B} = \frac{-A}{B^{2}}$
+
+Thus, $Y \approx \frac{\mu_{A}}{\mu_{B}} + (A-\mu_{A})\frac{1}{\mu_{B}} + (B-\mu_{B})\frac{-\mu_{A}}{\mu_{B}^{2}} = \frac{A}{\mu_{B}} = \frac{A}{N\sigma^{2}}$
+
+If we take the variance of Y, we have 
+$$\begin{aligned} Var(\frac{A}{N\sigma^{2}})  &= Var(\frac{\sum_{h=1}^{N-h}y_{n}y_{n+h}}{N\sigma^{2}})  \\
+&= \frac{1}{N^{2}\sigma^{4}} \big(E[\sum_{n=1}^{N-h} (y_{n}y_{n+h})^{2}] + 2\sum_{1 \ \leq i \ \leq j \ \leq (N-h)} E[X_{i}X_{i+h}X_{j}X_{j+h}] \big ) \\
+&= \frac{(N-h)\sigma^{4}}{N^{2}\sigma^{4}} \rightarrow \frac{1}{N} \end{aligned}$$
+
+Thus, it makes sense to use $\frac{1}{\sqrt{N}}$ as an approximation to the standard deviation of the sample autocorrelation estimator under the null hypothesis that the time series is a sequence of IID mean zero random variables. 
+
+----------------------
+
+
 **B**. It is often asserted that the horizontal dashed lines on the sample ACF plot represent a confidence interval. For example, in the documentation produced by `?plot.acf` we read
 
 ```
@@ -83,6 +114,13 @@ ci: coverage probability for confidence interval.  Plotting of the confidence in
 ```
 
 Use a definition of a confidence interval to explain how these lines do, or do not, construct a confidence interval. 
+
+
+----------------------
+
+*SOLN*
+
+The confidence interval is a function of the data. Our interval of $[\pm \frac{1}{\sqrt{N}}]$ is not a function of data, so it technically isn't a CI.
 
 
 ----------------------
